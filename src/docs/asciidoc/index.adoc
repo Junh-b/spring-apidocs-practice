@@ -1,0 +1,18 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== Home
+=== Welcome Message
+Request
+include::{snippets}/home/curl-request.adoc[]
+Response
+include::{snippets}/home/response-body.adoc[]
+include::{snippets}/home/response-fields.adoc[]
+
+== Store
+=== add new Store
+=== find One Store
+=== get All Stores
+
+== Menu
