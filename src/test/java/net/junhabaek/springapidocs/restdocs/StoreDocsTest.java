@@ -10,16 +10,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.constraints.ConstraintDescriptions;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -71,11 +77,21 @@ public class StoreDocsTest extends BaseRestDocsTest {
                 .andExpect(content().json(this.objectMapper.writeValueAsString(expectedResult)));
 
         // docs
-        actions.andDo(document("store/post",
+        ConstraintDescriptions createStoreConstraintDescriptions =
+                new ConstraintDescriptions(StoreController.StoreCreateDto.class);
+
+
+        actions.andDo(document("store/createNewStore",
                 requestFields(
-                        fieldWithPath("storeName").type(JsonFieldType.STRING).description("name of store"),
-                        fieldWithPath("addressStr").type(JsonFieldType.STRING).description("address of store"),
+                        fieldWithPath("storeName").type(JsonFieldType.STRING).description("name of store")
+                            .attributes(key("constraints")
+                                .value(createStoreConstraintDescriptions.descriptionsForProperty("storeName"))),
+                        fieldWithPath("addressStr").type(JsonFieldType.STRING).description("address of store")
+                            .attributes(key("constraints")
+                                .value(createStoreConstraintDescriptions.descriptionsForProperty("addressStr"))),
                         fieldWithPath("postcode").type(JsonFieldType.STRING).description("postcode of store")
+                            .attributes(key("constraints")
+                                .value(createStoreConstraintDescriptions.descriptionsForProperty("postcode")))
                 ),
                 responseFields(storeDtoDescriptor)));
     }

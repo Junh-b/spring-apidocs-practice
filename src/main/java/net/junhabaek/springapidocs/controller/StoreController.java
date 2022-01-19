@@ -7,13 +7,15 @@ import lombok.RequiredArgsConstructor;
 import net.junhabaek.springapidocs.domain.aggregate.Address;
 import net.junhabaek.springapidocs.domain.aggregate.Store;
 import net.junhabaek.springapidocs.service.StoreService;
-import org.mapstruct.*;
 import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +40,7 @@ public class StoreController {
     }
 
     @PostMapping("/store")
-    public ResponseEntity<StoreDto> registerNewStore(@RequestBody StoreCreateDto storeCreateDto){
+    public ResponseEntity<StoreDto> registerNewStore(@RequestBody @Valid StoreCreateDto storeCreateDto){
         Store store = storeService.register(storeCreateDto.storeName, storeCreateDto.addressStr, storeCreateDto.postcode);
         StoreDto storeDto = storeDtoMapper.entityToDto(store);
         return ResponseEntity.status(HttpStatus.CREATED).body(storeDto);
@@ -47,8 +49,11 @@ public class StoreController {
     @Data
     @NoArgsConstructor @AllArgsConstructor
     public static class StoreCreateDto{
+        @NotBlank @Size(min = 3, max = 20)
         private String storeName;
+        @NotBlank @Size(min = 6)
         private String addressStr;
+        @NotBlank @Size(min = 5)
         private String postcode;
     }
 
