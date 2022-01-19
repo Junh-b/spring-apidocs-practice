@@ -96,9 +96,42 @@ public class StoreDocsTest extends BaseRestDocsTest {
                 responseFields(storeDtoDescriptor)));
     }
 
-//    @Test
-//    void getStoreWithId() {
-//    }
+    @Test
+    void getStoreWithId() throws Exception {
+        // given
+
+        String storeName = "myStore";
+        String address = "songpa-gu";
+        String postcode = "12345";
+        Long storeId = 1L;
+
+        given(storeService.findStore(any(Long.class)))
+                .will(invocation -> {
+                    Store store = Store.createNewStore(storeName, address, postcode);
+                    TestUtils.setLongId(store, "id", invocation.getArgument(0));
+                    return store;
+                });
+
+        StoreController.StoreDto expectedResult =
+                new StoreController.StoreDto(storeId, storeName, new Address(address, postcode));
+
+        // when
+        ResultActions actions = this.mockMvc.perform(RestDocumentationRequestBuilders.get("/store/{id}", storeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(content().json(this.objectMapper.writeValueAsString(expectedResult)));
+
+        // docs
+        actions.andDo(document("store/getStoreById",
+                pathParameters(
+                        parameterWithName("id").description("id of store")
+                ),
+                responseFields(storeDtoDescriptor)));
+    }
 
 //    @Test
 //    void getAllStores() {
