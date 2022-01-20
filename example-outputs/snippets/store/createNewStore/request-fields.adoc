@@ -1,19 +1,22 @@
 |===
-|Path|Type|Description|Constraints
+|Path|Type|Description|Required|Constraints
 
 |storeName
 |String
 |name of store
+|true
 |[Must not be blank, Size must be between 3 and 20 inclusive]
 
 |addressStr
 |String
 |address of store
+|true
 |[Must not be blank, Size must be between 6 and 2147483647 inclusive]
 
 |postcode
 |String
 |postcode of store
+|true
 |[Must not be blank, Size must be between 5 and 2147483647 inclusive]
 
 |===
