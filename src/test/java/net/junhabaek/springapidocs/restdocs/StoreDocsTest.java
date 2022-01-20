@@ -33,10 +33,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("restdocs")
-@WebMvcTest(controllers = {StoreController.class})
-@ContextConfiguration(classes = {RestDocsMockConfiguration.class})
-@ComponentScan(basePackageClasses = StoreController.class)
+//@WebMvcTest(controllers = {StoreController.class})
+
 public class StoreDocsTest extends BaseRestDocsTest {
     @Autowired
     StoreService storeService;
