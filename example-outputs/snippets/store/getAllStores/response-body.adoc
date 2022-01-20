@@ -1,0 +1,18 @@
+[source,options="nowrap"]
+----
+[ {
+  "storeId" : 1,
+  "storeName" : "myStore1",
+  "address" : {
+    "fullAddress" : "songpa-gu",
+    "postcode" : "12345"
+  }
+}, {
+  "storeId" : 2,
+  "storeName" : "myStore2",
+  "address" : {
+    "fullAddress" : "gangnam-gu",
+    "postcode" : "67890"
+  }
+} ]
+----

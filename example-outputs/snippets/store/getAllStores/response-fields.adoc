@@ -1,0 +1,24 @@
+|===
+|Path|Type|Description
+
+|`+[]+`
+|`+Array+`
+|An array of Store Information
+
+|`+[].storeId+`
+|`+Number+`
+|id of store
+
+|`+[].storeName+`
+|`+String+`
+|name of store
+
+|`+[].address.fullAddress+`
+|`+String+`
+|address of store
+
+|`+[].address.postcode+`
+|`+String+`
+|postcode of store
+
+|===

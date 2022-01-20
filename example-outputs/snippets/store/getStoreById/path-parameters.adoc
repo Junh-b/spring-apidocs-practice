@@ -1,0 +1,8 @@
+.+/store/{id}+
+|===
+|Parameter|Description
+
+|`+id+`
+|id of store
+
+|===

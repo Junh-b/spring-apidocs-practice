@@ -5,14 +5,45 @@ endif::[]
 == Home
 === Welcome Message
 Request
-include::{snippets}/home/curl-request.adoc[]
+include::{snippets}/home/http-request.adoc[]
 Response
 include::{snippets}/home/response-body.adoc[]
+.Response Fields
 include::{snippets}/home/response-fields.adoc[]
 
 == Store
 === add new Store
-=== find One Store
-=== get All Stores
+Request example
+include::{snippets}/store/createNewStore/http-request.adoc[]
 
-== Menu
+Request Fields
+include::{snippets}/store/createNewStore/request-fields.adoc[]
+
+Response example
+include::{snippets}/store/createNewStore/response-body.adoc[]
+
+Response Fields
+include::{snippets}/store/createNewStore/response-fields.adoc[]
+
+=== find One Store
+Request example
+include::{snippets}/store/getStoreById/http-request.adoc[]
+
+Path Parameters
+include::{snippets}/store/getStoreById/path-parameters.adoc[]
+
+Response example
+include::{snippets}/store/getStoreById/response-body.adoc[]
+
+Response Fields
+include::{snippets}/store/getStoreById/response-fields.adoc[]
+
+=== get All Stores
+Request example
+include::{snippets}/store/getAllStores/http-request.adoc[]
+
+Response Example
+include::{snippets}/store/getAllStores/response-body.adoc[]
+
+Response Fields
+include::{snippets}/store/getAllStores/response-fields.adoc[]
