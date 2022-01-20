@@ -14,8 +14,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcConfigurer;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.restdocs.http.HttpDocumentation.httpRequest;
+import static org.springframework.restdocs.http.HttpDocumentation.httpResponse;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
 
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class, MockitoExtension.class})
@@ -37,7 +41,10 @@ public abstract class BaseRestDocsTest {
                 .and()
                 .uris()
                     .withScheme("https")
-                    .withHost("docs.api.com");
+                    .withHost("my-shop-domain.com")
+                .and()
+                .snippets()
+                    .withDefaults(httpRequest(), responseBody());
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(configurer) // can be replaced with @AutoConfigureRestDocs
