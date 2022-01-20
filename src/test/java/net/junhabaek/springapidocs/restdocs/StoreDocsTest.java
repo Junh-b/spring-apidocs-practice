@@ -18,6 +18,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -26,6 +28,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.snippet.Attributes.key;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -80,7 +83,6 @@ public class StoreDocsTest extends BaseRestDocsTest {
         ConstraintDescriptions createStoreConstraintDescriptions =
                 new ConstraintDescriptions(StoreController.StoreCreateDto.class);
 
-
         actions.andDo(document("store/createNewStore",
                 requestFields(
                         fieldWithPath("storeName").type(JsonFieldType.STRING).description("name of store")
@@ -133,8 +135,50 @@ public class StoreDocsTest extends BaseRestDocsTest {
                 responseFields(storeDtoDescriptor)));
     }
 
-//    @Test
-//    void getAllStores() {
-//    }
+    @Test
+    void getAllStores() throws Exception {
 
+        String firstStoreName = "myStore1";
+        String firstAddress = "songpa-gu";
+        String firstPostcode = "12345";
+        Long firstStoreId = 1L;
+
+        String secondStoreName = "myStore2";
+        String secondAddress = "gangnam-gu";
+        String secondPostcode = "67890";
+        Long secondStoreId = 2L;
+
+        given(storeService.getAllStores())
+                .will(invocation -> {
+                    Store firstStore = Store.createNewStore(firstStoreName, firstAddress, firstPostcode);
+                    TestUtils.setLongId(firstStore, "id", firstStoreId);
+
+                    Store secondStore = Store.createNewStore(secondStoreName, secondAddress, secondPostcode);
+                    TestUtils.setLongId(secondStore, "id", secondStoreId);
+                    return List.of(firstStore, secondStore);
+                });
+
+        StoreController.StoreDto firstStoreDto =
+                new StoreController.StoreDto(firstStoreId, firstStoreName, new Address(firstAddress, firstPostcode));
+
+        StoreController.StoreDto secondStoreDto =
+                new StoreController.StoreDto(secondStoreId, secondStoreName, new Address(secondAddress, secondPostcode));
+
+        List<StoreController.StoreDto> expectedResult = List.of(firstStoreDto, secondStoreDto);
+
+        // when
+        ResultActions actions = this.mockMvc.perform(get("/store")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(content().json(this.objectMapper.writeValueAsString(expectedResult)));
+
+        // docs
+        actions.andDo(document("store/getAllStores",
+                responseFields(fieldWithPath("[]").description("An array of Store Information"))
+                                .andWithPrefix("[].", storeDtoDescriptor)));
+    }
 }
